@@ -9,6 +9,38 @@ if(!($build))
   Write-Output "Cannot parse build.json"
   exit 1;
 }
+
+if($build.version){
+  Write-Output "Validating Version:  $_"
+  if($build.version.major -eq $null){
+    Write-Output "$_ is missing the major property"
+    exit 1;
+  }
+  else {
+    if(-Not ($build.version.major -is [int])){
+      Write-Output "$_ major property is not of type int"
+      exit 1;
+    }
+  }
+
+  if($build.version.minor -eq $null){
+    Write-Output "$_ is missing the minor property"
+    exit 1;
+  }
+  else {
+    if(-Not ($build.version.minor -is [int])){
+      Write-Output "$_ minor property is not of type int"
+      exit 1;
+    }
+  }
+
+}
+else {
+  Write-Output "$_ is missing the version property"
+  exit 1;
+}
+
+
 if($build.builds)
 {
   Write-Output "Validating Builds:  $_"
