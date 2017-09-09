@@ -81,3 +81,23 @@ if($build.packages)
     }
   }
 }
+
+if($build.clientState){
+  Write-Output "Validating ClientState:  $_"
+  if($build.clientState.name -eq $null){
+    Write-Output "$_ is missing the name property"
+    exit 1;
+  }
+  else {
+    if(-Not ($build.clientState.name -is [string])){
+      Write-Output "$_ name property is not of type string"
+      exit 1;
+    }
+  }
+}
+
+# this is currently optional
+#else {
+  #Write-Output "$_ is missing the clientState property"
+  #exit 1;
+#}
