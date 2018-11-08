@@ -87,15 +87,30 @@ if ($build.clientState) {
         }
     }
 }
-else {
-    Write-Output "$_ is missing the clientState property"
-    exit 1;
-}
+#else {
+#    Write-Output "$_ is missing the clientState property"
+#    exit 1;
+#}
 
 if ($build.swagger) {
     Write-Output "Validating swagger feature:  $_"
     if (-Not ($build.swagger.enabled -is [Boolean])) {
         Write-Output "$_ enabled property is not of type boolean"
+        exit 1;
+    }
+    if (-Not $build.swagger.deploymentName) {
+        Write-Output "$_ deploymentName is required"
+        exit 1;
+    }
+    $matchingDeploy = $false
+    $build.deploys | ForEach-Object {
+        if ($_.name -eq $build.swagger.deploymentName) {
+            matchingDeploy = $true
+        }
+    }
+
+    if (-Not $matchingDeploy) {
+        Write-Output "$_ deploymentName does not match any deploys"
         exit 1;
     }
 }
